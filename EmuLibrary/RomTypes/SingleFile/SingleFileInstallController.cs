@@ -1,4 +1,4 @@
-﻿using Playnite.SDK;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System;
@@ -29,17 +29,14 @@ namespace EmuLibrary.RomTypes.SingleFile
 
             _watcherToken = new CancellationTokenSource();
 
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 try
                 {
-                    using (var src = File.Open(info.SourceFullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        using (var dst = File.Create(Path.Combine(dstPath, info.SourcePath)))
-                        {
-                            await src.CopyToAsync(dst, 81920 /* default */, _watcherToken.Token);
-                        }
-                    }
+                    string sourcePath = info.SourceFullPath;
+                    string destinationPath = Path.Combine(dstPath, Path.GetFileName(sourcePath));
+
+                    File.Move(sourcePath, destinationPath);
 
                     var installDir = dstPath;
                     var gamePath = Path.Combine(dstPath, info.SourcePath);
