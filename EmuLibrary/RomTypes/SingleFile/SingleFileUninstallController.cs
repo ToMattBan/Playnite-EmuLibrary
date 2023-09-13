@@ -1,4 +1,5 @@
-﻿using Playnite.SDK;
+using LibHac.FsSystem;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System;
@@ -23,7 +24,11 @@ namespace EmuLibrary.RomTypes.SingleFile
             var info = new FileInfo(gameImagePathResolved);
             if (info.Exists)
             {
-                File.Delete(gameImagePathResolved);
+                string sourcePath = gameImagePathResolved;
+                string destinationPath = Game.GetSingleFileGameInfo().SourceFullPath;
+
+                File.Move(sourcePath, destinationPath);
+
                 InvokeOnUninstalled(new GameUninstalledEventArgs());
             }
             else
